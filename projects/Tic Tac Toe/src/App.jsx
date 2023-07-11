@@ -1,47 +1,46 @@
 import { useState } from 'react'
 import './App.css'
-import confetti from 'canvas-confetti';
-import { Square } from './components/Square';
-import { TURNS } from './constants';
-import { checkEndGame, checkWinnerFrom } from './logic/board';
-import { WinnerModal } from './components/WinnerModal';
-import { BoardGame } from './components/BoardGame';
+import confetti from 'canvas-confetti'
+import { Square } from './components/Square'
+import { TURNS } from './constants'
+import { checkEndGame, checkWinnerFrom } from './logic/board'
+import { WinnerModal } from './components/WinnerModal'
+import { BoardGame } from './components/BoardGame'
 
-function App() {
-
+function App () {
   const [board, setBoard] = useState(() => {
     const boardFromStorage = window.localStorage.getItem('board')
     return boardFromStorage ? JSON.parse(boardFromStorage) : Array(9).fill(null)
   })
   const [turn, setTurn] = useState(() => {
     const turnFromStorage = window.localStorage.getItem('turn')
-    return turnFromStorage ??  TURNS.X
+    return turnFromStorage ?? TURNS.X
   })
 
-  const [winner, setWinner] = useState(null) //null se usará como que no hay ganador y false como un empate
+  const [winner, setWinner] = useState(null) // null se usará como que no hay ganador y false como un empate
 
   const updateBoard = (index) => {
-    if(board[index] || winner) return
+    if (board[index] || winner) return
     // Crea un nuevo tablero, el nuevo tablero en la posicion donde se ha realizado el clikc(index) se guarda el turno (X o O) y se
     // actualiza el tablero de nuesta App con el nuevo tablero y el turno
     const newBoard = [...board]
     newBoard[index] = turn
     setBoard(newBoard)
 
-    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X 
+    const newTurn = turn === TURNS.X ? TURNS.O : TURNS.X
     setTurn(newTurn)
 
-    //Guardar aqui partida en local.storage 
+    // Guardar aqui partida en local.storage
     window.localStorage.setItem('board', JSON.stringify(newBoard))
     window.localStorage.setItem('turn', newTurn)
 
     const newWinner = checkWinnerFrom(newBoard)
 
-    if(newWinner) {
+    if (newWinner) {
       setWinner(newWinner)
       confetti()
     } else if (checkEndGame(newBoard)) {
-      setWinner(false) //false == empate
+      setWinner(false) // false == empate
     }
   }
 
@@ -59,20 +58,19 @@ function App() {
       <main className='board'>
         <h1>Tic Tac Toe</h1>
         <button onClick={resetGame}>Reset</button>
-        <BoardGame boardGame={board} updateBoard={updateBoard}/>
+        <BoardGame boardGame={board} updateBoard={updateBoard} />
         <section className='turn'>
-          <Square isSelected = {turn === TURNS.X}>
+          <Square isSelected={turn === TURNS.X}>
             {TURNS.X}
           </Square>
-          <Square isSelected = {turn === TURNS.O}>
+          <Square isSelected={turn === TURNS.O}>
             {TURNS.O}
           </Square>
         </section>
-        <WinnerModal winner={winner} resetGame={resetGame} ></WinnerModal>
+        <WinnerModal winner={winner} resetGame={resetGame} />
       </main>
-      
+
     </>
   )
 }
 export default App
-
