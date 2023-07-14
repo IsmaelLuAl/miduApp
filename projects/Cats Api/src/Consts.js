@@ -1,0 +1,1 @@
+export const CAT_PREFIX_IMG_URL = `https://cataas.com`
