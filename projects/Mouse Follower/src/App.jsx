@@ -13,7 +13,12 @@ function App () {
     if (enable) {
       window.addEventListener('pointermove', handleMove)
     }
-    return () => {
+
+    // Cleanup:
+    // -> Cuando el componente se desmonta
+    // -> Cuando cambian las dependencias, antes de ejecutar
+    //   El efecto de nuevo
+    return () => { // Clueanup method
       window.removeEventListener('pointermove', handleMove)
     }
   }, [enable])
