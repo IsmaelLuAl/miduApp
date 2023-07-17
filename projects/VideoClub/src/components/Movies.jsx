@@ -23,7 +23,7 @@ function ListOfMovies ({ movies }) {
 
 function NoMovies () {
   return (
-    <p>No results fro this title</p>
+    <p>No results from this title</p>
   )
 }
 

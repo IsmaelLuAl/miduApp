@@ -5,10 +5,14 @@ import { useSearch } from './hooks/useSearch'
 
 function App () {
   const { search, setSearch, error } = useSearch()
-  const { movies, getMovies } = useMovies({ search })
+  const { movies, loading, getMovies } = useMovies({ search })
 
   const handleChange = (event) => {
     setSearch(event.target.value)
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
     getMovies()
   }
 
@@ -17,7 +21,7 @@ function App () {
       <div>
         <header>
           <h1>VideoClub</h1>
-          <form className='form'>
+          <form className='form' onSubmit={handleSubmit}>
             <label className='input-search'>
               Search your movie
               <input
@@ -33,7 +37,11 @@ function App () {
           {error && <p style={{ color: 'red' }}>{error}</p>}
         </header>
         <main>
-          <Movies movies={movies} />
+          {
+            loading
+              ? <p>Loading...</p>
+              : <Movies movies={movies} />
+          }
         </main>
       </div>
     </>

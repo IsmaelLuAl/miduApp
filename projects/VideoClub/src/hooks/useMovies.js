@@ -1,31 +1,24 @@
 import { useState } from 'react'
-import responseMovies from '../mocks/resultsApiWithSearch.json'
-import { API_MOVIES_ENDPOINT } from '../const'
-import withoutResults from '../mocks/noResults.json'
+import { searchMovies } from '../services/movies'
 
 export function useMovies ({ search }) {
-  const [responseMoviesApi, setResponseMoviesApi] = useState([])
-
-  const movies = responseMovies.Search
-  const mappedMovies = movies?.map(movie => ({
-    id: movie.imdbID,
-    title: movie.Title,
-    year: movie.Year,
-    poster: movie.Poster
-  }))
-
-  const urlQuerySearch = `${API_MOVIES_ENDPOINT}s=${search}`
+  const [movies, setMovies] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [, setError] = useState(null)
 
   const getMovies = async () => {
-    if (search) {
-      setResponseMoviesApi(responseMovies)
-    } else {
-      setResponseMoviesApi(withoutResults)
+    try {
+      setLoading(true)
+      setError(null)
+
+      const newMovies = await searchMovies({ search })
+      setMovies(newMovies)
+    } catch (error) {
+      setError(error.message)
+    } finally {
+      setLoading(false)
     }
-    // const res = await fetch(urlQuerySearch)
-    // const data = await res.json()
-    // console.log(data)
   }
 
-  return { movies: mappedMovies, getMovies }
+  return { movies, loading, getMovies }
 }
