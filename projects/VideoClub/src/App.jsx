@@ -1,23 +1,30 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import './App.css'
 import { Movies } from './components/Movies'
 import { useMovies } from './hooks/useMovies'
 import { useSearch } from './hooks/useSearch'
+import debounce from 'just-debounce-it'
 
 function App () {
   const [sort, setSort] = useState(false)
   const { search, setSearch, error } = useSearch()
   const { movies, loading, getMovies } = useMovies({ search, sort })
 
+  // La función de debounce necesita un useCallback porque sino crearia una nueva función cada vez que se renderiza el componente
+  const debouncedGetMovies = useCallback(
+    debounce(search => {
+      console.log('inside debounce', search)
+      getMovies({ search })
+    }, 500), [])
+
   const handleChange = (event) => {
     const newSearch = event.target.value
     setSearch(newSearch)
-    getMovies({ search: newSearch })
+    debouncedGetMovies(newSearch)
   }
 
   const handleSubmit = (event) => {
     event.preventDefault()
-    getMovies({ search })
   }
 
   const handleSort = () => {
