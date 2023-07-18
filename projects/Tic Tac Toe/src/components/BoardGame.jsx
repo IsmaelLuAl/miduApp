@@ -1,7 +1,6 @@
 import { Square } from './Square'
 
 export const BoardGame = ({ boardGame, updateBoard }) => {
-  console.log(boardGame)
   return (
     <>
       <section className='game'>
