@@ -5,16 +5,22 @@ import { Header } from './components/Header'
 import { useFilters } from './hooks/useFilters'
 import { listOfProducts as initialProducts } from './mocks/products.json'
 import { Footer } from './components/Footer'
+import { Cart } from './components/Cart'
+import { CartProvider } from './context/cartProvider'
 
 function App () {
   const [products] = useState(initialProducts)
-  const { filteredProducts, setFilters } = useFilters({ products })
+  // console.log('Item de un producto', products[0])
+  const { filteredProducts } = useFilters({ products })
 
   return (
     <>
-      <Header changeFilters={setFilters} />
-      <Products products={filteredProducts} />
-      <Footer />
+      <CartProvider>
+        <Header />
+        <Cart />
+        <Products products={filteredProducts} />
+        <Footer />
+      </CartProvider>
     </>
   )
 }

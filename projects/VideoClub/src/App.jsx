@@ -13,7 +13,6 @@ function App () {
   // La función de debounce necesita un useCallback porque sino crearia una nueva función cada vez que se renderiza el componente
   const debouncedGetMovies = useCallback(
     debounce(search => {
-      console.log('inside debounce', search)
       getMovies({ search })
     }, 500), [])
 
