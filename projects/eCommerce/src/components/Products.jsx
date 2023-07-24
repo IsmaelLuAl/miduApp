@@ -1,33 +1,46 @@
 import './Products.css'
-import { AddToCartIcon } from './icons'
-import { useCallback, useContext } from 'react'
-import { CartContext } from '../context/cartProvider'
+import { AddToCartIcon, RemoveFromCartIcon } from './icons'
+import { useCart } from '../hooks/useCart'
 
 export const Products = ({ products }) => {
-  const { addToCart } = useContext(CartContext)
+  const { cart, handleClickAddToCart, handleClickRemoveFromCart } = useCart()
 
-  const handleClick = useCallback((product) => {
-    console.log('Añadir al carrito', product)
-    addToCart(product)
-  }, [])
+  const checkProductInCart = (product) => {
+    return cart.some(item => item.id === product.id)
+  }
 
   return (
     <main className='products'>
       <ul>
         {
-          products.slice(0, 10).map(product => (
-            <li key={product.id}>
-              <img src={product.thumbnail} alt={product.title} />
-              <div>
-                <strong>{product.title}</strong>
-                <strong> - {product.price}€</strong>
-              </div>
-              <div>
-                {/* <button style={{ color: '#fff' }}><AddToCartIcon /></button> */}
-                <button style={{ color: '#fff' }} onClick={() => handleClick(product)}><AddToCartIcon /></button>
-              </div>
-            </li>
-          ))
+          products.slice(0, 10).map(product => {
+            const isProductInCart = checkProductInCart(product)
+
+            return (
+              <li key={product.id}>
+                <img src={product.thumbnail} alt={product.title} />
+                <div>
+                  <strong>{product.title}</strong>
+                  <strong> - {product.price}€</strong>
+                </div>
+                <div>
+                  {/* <button style={{ color: '#fff' }}><AddToCartIcon /></button> */}
+                  <button
+                    style={{ backgroundColor: isProductInCart ? 'red' : '#09F' }} onClick={() =>
+                      isProductInCart
+                        ? handleClickRemoveFromCart(product)
+                        : handleClickAddToCart(product)}
+                  >
+                    {
+                      isProductInCart
+                        ? <RemoveFromCartIcon />
+                        : <AddToCartIcon />
+                    }
+                  </button>
+                </div>
+              </li>
+            )
+          })
         }
       </ul>
 

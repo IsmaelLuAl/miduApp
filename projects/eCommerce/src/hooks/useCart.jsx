@@ -2,54 +2,25 @@ import { useCallback, useContext } from 'react'
 import { CartContext } from '../context/cartProvider'
 
 export function useCart (product) {
-  const { cart, setCart } = useContext(CartContext)
+  const { cart, addToCart, removeFromCart, clearCart } = useContext(CartContext)
 
-  // const addToCart = useCallback((product) => {
-  //   const productInCartIndex = cart.findIndex(product => product.id === productInCartIndex.id)
-  //   console.log('El index del producto en el carrito', productInCartIndex)
-
-  //   if (productInCartIndex === -1) {
-  //     return
-  //   }
-  //   if (productInCartIndex >= 0) {
-  //     const newCart = structuredClone(cart)
-  //     newCart[productInCartIndex].quantity += 1
-  //     return setCart(newCart)
-  //   }
-  //   setCart(prevState => [...prevState, { ...productInCartIndex, quantity: 1 }])
-  // }, [cart, setCart])
-
-  const addToCart = useCallback(
-    () => {
-      console.log('Añadir al carrito', product)
-    },
-    [product]
-  )
-
-  // const addToCart = () => {
-  //   console.log('Añadir al carrito')
+  // Si el contexto es undefined, significa que estas usando el customHoook en un sitio que no puedes
+  // porque esa parte de la app no esta envuelta con un provider
+  // if (cart === undefined || setCart === undefined) {
+  //   throw new Error('useCart must be used within a CartProvider')
   // }
 
-  // const getMovies = useCallback(async ({ search }) => {
-  //   if (search === previousSearch.current) return
-  //   try {
-  //     setLoading(true)
-  //     setError(null)
+  const handleClickAddToCart = useCallback((product) => {
+    addToCart(product)
+  }, [product])
 
-  //     previousSearch.current = search
-  //     const newMovies = await searchMovies({ search })
-  //     setMovies(newMovies)
-  //   } catch (error) {
-  //     setError(error.message)
-  //   } finally {
-  //     setLoading(false)
-  //   }
-  // }, [])
+  const handleClickRemoveFromCart = useCallback((product) => {
+    removeFromCart(product)
+  }, [product])
 
-  // const handleClickAddToCart = useCallback((product) => {
-  //   addToCart(product)
-  // }, []
-  // )
+  const handleClickClearCart = () => {
+    clearCart()
+  }
 
-  return { addToCart }
+  return { cart, handleClickAddToCart, handleClickRemoveFromCart, handleClickClearCart }
 }

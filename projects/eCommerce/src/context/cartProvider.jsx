@@ -5,23 +5,19 @@ export const CartContext = createContext()
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([])
 
-  const addToCart = () => {
-    const productInCartIndex = cart.findIndex(item => item.id === productInCartIndex.id)
-    console.log('El index del producto en el carrito', productInCartIndex)
+  const addToCart = (product) => {
+    const productInCartIndex = cart.findIndex(item => item.id === product.id)
 
-    if (productInCartIndex === -1) {
-      return
-    }
     if (productInCartIndex >= 0) {
-      const newCart = structuredClone(cart)
+      const newCart = [...cart]
       newCart[productInCartIndex].quantity += 1
       return setCart(newCart)
     }
-    setCart(prevState => [...prevState, { ...productInCartIndex, quantity: 1 }])
+    setCart(prevState => ([...prevState, { ...product, quantity: 1 }]))
   }
 
-  const removeFromCart = (itemId) => {
-
+  const removeFromCart = (product) => {
+    setCart(prevState => prevState.filter(item => item.id !== product.id))
   }
 
   const clearCart = () => {

@@ -1,11 +1,11 @@
-import { useContext, useId } from 'react'
+import { useId } from 'react'
 import { CartIcon, ClearCartIcon, RemoveFromCartIcon } from './icons'
 import './Cart.css'
-import { CartContext } from '../context/cartProvider'
+import { useCart } from '../hooks/useCart'
 
 export const Cart = () => {
   const cartCheckboxId = useId()
-  const { cart } = useContext(CartContext)
+  const { cart, handleClickAddToCart, handleClickClearCart } = useCart()
 
   return (
     <>
@@ -18,7 +18,6 @@ export const Cart = () => {
         <ul>
           {cart.length !== 0 &&
             cart.map(product => {
-              // console.log('Cada producto del carrito', product)
               return (
                 <div key={product.id}>
                   <li>
@@ -29,9 +28,9 @@ export const Cart = () => {
                   </div>
                   <footer>
                     <small>
-                      Qty: 1
+                      Qty: {product.quantity}
                     </small>
-                    <button>+</button>
+                    <button onClick={() => handleClickAddToCart(product)}>+</button>
                   </footer>
                 </div>
               )
@@ -41,7 +40,7 @@ export const Cart = () => {
           </li> */}
         </ul>
 
-        <button className='clear-cart'>
+        <button className='clear-cart' onClick={() => handleClickClearCart()}>
           <ClearCartIcon />
         </button>
       </aside>
