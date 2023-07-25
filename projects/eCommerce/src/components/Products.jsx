@@ -1,9 +1,10 @@
 import './Products.css'
 import { AddToCartIcon, RemoveFromCartIcon } from './icons'
-import { useCart } from '../hooks/useCart'
+import { useContext } from 'react'
+import { CartContext } from '../context/cartProvider'
 
 export const Products = ({ products }) => {
-  const { cart, handleClickAddToCart, handleClickRemoveFromCart } = useCart()
+  const { cart, addToCart, removeFromCart } = useContext(CartContext)
 
   const checkProductInCart = (product) => {
     return cart.some(item => item.id === product.id)
@@ -28,8 +29,8 @@ export const Products = ({ products }) => {
                   <button
                     style={{ backgroundColor: isProductInCart ? 'red' : '#09F' }} onClick={() =>
                       isProductInCart
-                        ? handleClickRemoveFromCart(product)
-                        : handleClickAddToCart(product)}
+                        ? removeFromCart(product)
+                        : addToCart(product)}
                   >
                     {
                       isProductInCart
