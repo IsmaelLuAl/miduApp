@@ -1,27 +1,25 @@
-import { useEffect, useState } from 'react'
-import { EVENTS } from '../const/const'
+import { Children, useState } from 'react'
 import { match } from 'path-to-regexp'
+import { useRouter } from '../hooks/useRouter'
 
-export const Router = ({ routes = [], defaultComponent: DefaultComponent = () => <h1>404</h1> }) => {
+export const Router = ({ children, routes = [], defaultComponent: DefaultComponent = () => <h1>404</h1> }) => {
   const [currentPath, setCurrentPath] = useState(window.location.pathname)
 
-  useEffect(() => {
-    const onLocationChange = () => {
-      setCurrentPath(window.location.pathname)
-    }
-
-    window.addEventListener(EVENTS.PUSHSTATE, onLocationChange)
-    window.addEventListener(EVENTS.POPSTATE, onLocationChange)
-
-    return () => {
-      window.removeEventListener(EVENTS.PUSHSTATE, onLocationChange)
-      window.removeEventListener(EVENTS.POPSTATE, onLocationChange)
-    }
-  }, [])
+  useRouter(setCurrentPath)
 
   let routeParams = {}
 
-  const Page = routes.find(({ path }) => {
+  // add routes from children <Route /> component
+  const routesFromChildren = Children.map(children, ({ props, type }) => {
+    const { name } = type
+    const isRoute = name === 'Route'
+
+    return isRoute ? props : null
+  })
+
+  const routesToUse = routes.concat(routesFromChildren)
+
+  const Page = routesToUse.find(({ path }) => {
     if (path === currentPath) return true
 
     const matcherURL = match(path, { decode: decodeURIComponent })

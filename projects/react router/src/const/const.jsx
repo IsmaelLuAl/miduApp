@@ -1,5 +1,4 @@
-import { AboutPage } from '../pages/About'
-import { HomePage } from '../pages/Home'
+import { SearchPage } from '../pages/SearchPage'
 
 export const EVENTS = {
   PUSHSTATE: 'pushs tate',
@@ -12,15 +11,7 @@ export const BUTTONS = {
 
 export const routes = [
   {
-    path: '/',
-    Component: HomePage
-  },
-  {
-    path: '/about',
-    Component: AboutPage
-  },
-  {
     path: '/search/:query',
-    Component: () => <h1>Search</h1>
+    Component: SearchPage
   }
 ]
