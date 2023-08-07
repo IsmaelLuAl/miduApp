@@ -25,9 +25,32 @@ li p {
 li {
   padding: 10px;
   overflow: auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 5px;
 }
  
 li:hover {
-  background: #111111;
+  background: #dfd7d7;
+  border: 1px solid #111111;
   cursor: pointer;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+form input {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  padding: 4px 6px;
+  margin: 0 0 4px;
+
+}
+
+textarea {
+  font-family: inherit;
+  margin-bottom: 8px;
+  padding-left: 5px;
 }
